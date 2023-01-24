@@ -1,0 +1,88 @@
+body {
+  box-shadow: none;
+  text-align: center;
+  background-color: #e0dcc8;
+  color: white;
+  background-blend-mode: lighten;
+  background-image: url('../img/floor.jpg');
+}
+table {
+  border-spacing: 0px;
+  display: flex;
+  justify-content: center;
+}
+
+table tbody {
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+h1,
+h2 {
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #28282b;
+  font-family: cursive;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #f49679;
+  text-align: center;
+}
+
+.restart {
+  transition: 0.1s all;
+  margin-top: 30px;
+  background-color: #f49679;
+  border: 3px solid #604029;
+  color: #604029;
+  font-weight: bold;
+  width: 11rem;
+  height: 2.9rem;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 25px;
+}
+
+.restart:hover {
+  border: none;
+  outline: solid 4px #604029;
+}
+
+.cell {
+  width: 55px;
+  height: 55px;
+  text-align: center;
+}
+.cell img {
+  width: 40px;
+  height: 36px;
+}
+
+/* IMAGES CLASSES */
+
+.green {
+  background-size: cover;
+  background-image: url('../img/green.jpg');
+}
+.red {
+  background-size: cover;
+  background-image: url('../img/red.jpg');
+}
+.wall {
+  background-size: cover;
+  background-image: url('../img/wall.jpg');
+}
+.floor {
+  background-size: cover;
+  background-image: url('../img/floor.jpg');
+}
+.box {
+  background-size: cover;
+  background-image: url('../img/box.jpg');
+}
+.target {
+  background-size: cover;
+  background-image: url('../img/target.jpg');
+}
+/*////////////////*/
