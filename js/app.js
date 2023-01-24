@@ -30,12 +30,6 @@ var gPlayerScore
 var gIsGameFinished
 var gTargetsMarked
 var gFreeSteps
-var gRandomClockInterval
-var gRandomGoldInterval
-var gRandomThornsInterval
-var gThornsTimeOut
-var gClockTimeOut
-var gGoldTimeOut
 
 // Initiate game
 function initGame() {
@@ -176,20 +170,49 @@ function createLevel(board) {
   board[9][9].isTarget = true
 }
 
+function handleReturnConditions(targetCell, i, j) {
+  if (targetCell.type === WALL) return false
+  if (
+    (targetCell.type === BOX &&
+      gBoard[i][j + 1].type === WALL &&
+      gUserPos.j < j) ||
+    (targetCell.type === BOX && gBoard[i][j + 1].type === BOX && gUserPos.j < j)
+  )
+    return false
+  if (
+    (targetCell.type === BOX &&
+      gBoard[i][j - 1].type === WALL &&
+      gUserPos.j > j) ||
+    (targetCell.type === BOX && gBoard[i][j - 1].type === BOX && gUserPos.j > j)
+  )
+    return false
+  if (
+    (targetCell.type === BOX &&
+      gBoard[i + 1][j].type === WALL &&
+      gUserPos.i < i) ||
+    (targetCell.type === BOX && gBoard[i + 1][j].type === BOX && gUserPos.i < i)
+  )
+    return false
+  if (
+    (targetCell.type === BOX &&
+      gBoard[i - 1][j].type === WALL &&
+      gUserPos.i > i) ||
+    (targetCell.type === BOX && gBoard[i - 1][j].type === BOX && gUserPos.i > i)
+  )
+    return false
+
+  return true
+}
+
 // Move the player to a specific location
 function moveTo(i, j) {
   if (gMovement) {
     var targetCell = gBoard[i][j]
-    if (targetCell.type === WALL) return
+    if (!handleReturnConditions(targetCell, i, j)) return
 
     // Calculate distance to make sure we are moving to a neighbor cell
     var iAbsDiff = Math.abs(i - gUserPos.i)
     var jAbsDiff = Math.abs(j - gUserPos.j)
-    // console.log('i - gUserPos.i',i - gUserPos.i)
-    // console.log('j - gUserPos.j',j - gUserPos.j)
-
-    // var diffI
-    // var diffJ
 
     // If the clicked Cell is one of the four allowed
     if (
@@ -254,8 +277,6 @@ function moveTo(i, j) {
     gH2SpanEl.innerText = gPlayerScore
   }
 }
-
-function helperFunction(i, j) {}
 
 // Handing free steps
 function handleFreeSteps(i, j) {
@@ -437,77 +458,6 @@ function checkTargetMarked(upDownLeftOrRight, actionOne, actionTwo) {
       addClass({ i: gUserPos.i + actionOne, j: gUserPos.j }, 'target')
     }
   }
-}
-
-// Stepping on thorns
-function stepOnThorns() {
-  var audio = new Audio('sounds/meow.mp3')
-  audio.play()
-  gPlayerScore -= 5
-  gIsGameFinished = true
-  gMovement = false
-  addClass({ i: gUserPos.i, j: gUserPos.j }, 'red')
-  removeClass({ i: gUserPos.i, j: gUserPos.j }, 'floor')
-  setTimeout(() => {
-    removeClass({ i: gUserPos.i, j: gUserPos.j }, 'red')
-    addClass({ i: gUserPos.i, j: gUserPos.j }, 'floor')
-    gMovement = true
-    gIsGameFinished = false
-  }, 3000)
-}
-
-// Step on gold
-function stepOnGold(i, j) {
-  var audio = new Audio('sounds/gold.wav')
-  audio.play()
-  gPlayerScore += 100
-  addClass({ i: gUserPos.i, j: gUserPos.j }, 'green')
-  removeClass({ i: gUserPos.i, j: gUserPos.j }, 'floor')
-  setTimeout(() => {
-    addClass({ i: gUserPos.i, j: gUserPos.j }, 'floor')
-  }, 2000)
-}
-
-// Step on clock
-function stepOnClock() {
-  var audio = new Audio('sounds/timer.mp3')
-  audio.play()
-  gFreeSteps = true
-  setTimeout(() => {
-    getElement(gUserPos.i, gUserPos.j).classList.remove('green')
-    getElement(gUserPos.i, gUserPos.j).classList.add('floor')
-    gFreeSteps = false
-  }, 10000)
-}
-
-// add random clock in board
-function addRandomClock() {
-  var emptyCell = spawnRandomElement(CLOCK, CLOCK_IMG)
-  gClockTimeOut = setTimeout(() => {
-    if (gBoard[emptyCell.i][emptyCell.j].gameElement === CLOCK) {
-      removeElement(emptyCell)
-    }
-  }, 5000)
-}
-
-// Add random gold in board
-function addRandomGold() {
-  var emptyCell = spawnRandomElement(GOLD, GOLD_IMG)
-  gGoldTimeOut = setTimeout(() => {
-    if (gBoard[emptyCell.i][emptyCell.j].gameElement === GOLD) {
-      removeElement(emptyCell)
-    }
-  }, 4000)
-}
-
-// Spawn random thorns on board
-function addRandomThorns() {
-  var emptyCell = spawnRandomElement(THORNS, THORNS_IMG)
-  gThornsTimeOut = setTimeout(() => {
-    if (gBoard[emptyCell.i][emptyCell.j].gameElement === THORNS) {
-      removeElement(emptyCell)
-    }
-  }, 3000)
 }
 
 // Finish game
